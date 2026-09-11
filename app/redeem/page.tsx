@@ -10,7 +10,7 @@ export default function RedeemPage() {
 
   return (
     <div>
-      <Link href="/" className="text-indigo text-[13.5px] underline">
+      <Link href="/" className="text-indigo text-[13px] underline">
         &larr; Back to dashboard
       </Link>
       <div className="bg-surface border border-line rounded p-6 mt-4">
@@ -23,11 +23,11 @@ export default function RedeemPage() {
           placeholder="e.g. 7QQ2XM"
           value={code}
           onChange={(e) => setCode(e.target.value.toUpperCase())}
-          className="w-full px-3 py-2.5 border border-line rounded bg-surface2 text-[15px] uppercase focus:outline-none focus:ring-2 focus:ring-brass"
+          className="w-full px-3 py-2 border border-line rounded bg-surface2 text-[15px] uppercase focus:outline-none focus:ring-2 focus:ring-brass"
         />
         <button
           onClick={() => code.trim() && router.push(`/m/${code.trim()}`)}
-          className="mt-5 bg-indigo hover:bg-indigodeep text-surface2 px-4.5 py-2.5 rounded text-[14.5px] font-medium"
+          className="mt-5 bg-indigo hover:bg-indigodeep text-surface2 px-4 py-2 rounded text-[14px] font-medium"
         >
           Continue
         </button>

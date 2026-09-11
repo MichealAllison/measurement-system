@@ -58,17 +58,17 @@ export default function MeasurementForm({
 
       <div className="grid gap-4 sm:grid-cols-[1fr_auto] mb-6">
         <div>
-          <label className="block text-xs text-inksoft mb-1.5">Measurement style</label>
+          <label className="block text-xs text-inksoft mb-1">Measurement style</label>
           <select
             value={style}
             onChange={(e) => setStyle(e.target.value)}
-            className="w-full px-3 py-2.5 border border-line rounded bg-surface2 text-[14px] focus:outline-none focus:ring-2 focus:ring-brass"
+            className="w-full px-3 py-2 border border-line rounded bg-surface2 text-[14px] focus:outline-none focus:ring-2 focus:ring-brass"
           >
             {FIELD_STYLES.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}
           </select>
         </div>
         <div>
-          <label className="block text-xs text-inksoft mb-1.5">Units</label>
+          <label className="block text-xs text-inksoft mb-1">Units</label>
           <div className="inline-flex border border-line rounded overflow-hidden h-[42px]">
           {(['cm', 'in'] as const).map((u) => (
             <button
@@ -96,7 +96,7 @@ export default function MeasurementForm({
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {getFieldsForStyle(style).map((f) => (
           <div key={f.key}>
-            <label className="block text-xs text-inksoft mb-1.5">{f.label}</label>
+            <label className="block text-xs text-inksoft mb-1">{f.label}</label>
             <input
               type="number"
               step="0.1"
@@ -104,7 +104,7 @@ export default function MeasurementForm({
               placeholder="0"
               value={values[f.key] || ''}
               onChange={(e) => setValues((v) => ({ ...v, [f.key]: e.target.value }))}
-              className="tabular w-full px-3 py-2.5 border border-line rounded bg-surface2 text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-brass"
+              className="tabular w-full px-3 py-2 border border-line rounded bg-surface2 text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-brass"
             />
           </div>
         ))}
@@ -127,7 +127,7 @@ export default function MeasurementForm({
         {customMeasurements.length === 0 ? (
           <div className="border border-dashed border-line rounded p-3 text-xs text-inksoft">No extra fields yet.</div>
         ) : (
-          <div className="space-y-2.5">
+          <div className="space-y-2">
             {customMeasurements.map((item, index) => (
               <div key={index} className="grid grid-cols-[1fr_6rem_auto] gap-2 items-center">
                 <input
@@ -161,13 +161,13 @@ export default function MeasurementForm({
       </div>
 
       <div className="mt-5">
-        <label className="block text-xs text-inksoft mb-1.5">Notes (fit preferences, etc.)</label>
+        <label className="block text-xs text-inksoft mb-1">Notes (fit preferences, etc.)</label>
         <input
           type="text"
           placeholder="e.g. likes a loose sleeve"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          className="w-full px-3 py-2.5 border border-line rounded bg-surface2 text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-brass"
+          className="w-full px-3 py-2 border border-line rounded bg-surface2 text-ink text-[15px] focus:outline-none focus:ring-2 focus:ring-brass"
         />
       </div>
 
@@ -176,7 +176,7 @@ export default function MeasurementForm({
       <button
         onClick={handleSubmit}
         disabled={saving}
-        className="mt-6 bg-indigo hover:bg-indigodeep text-surface2 px-5 py-2.5 rounded text-[14.5px] font-medium disabled:opacity-60"
+        className="mt-6 bg-indigo hover:bg-indigodeep text-surface2 px-5 py-2 rounded text-[14px] font-medium disabled:opacity-60"
       >
         {saving ? 'Saving…' : submitLabel}
       </button>

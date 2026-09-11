@@ -53,7 +53,7 @@ export default function ClientEntryPage({ params }: { params: { code: string } }
 
   return (
     <div className="mt-10">
-      <div className="bg-surface2 border border-brass rounded p-3.5 text-[13.5px] mb-5">
+      <div className="bg-surface2 border border-brass rounded p-3 text-[13px] mb-5">
         Submitting measurements for <strong>{client?.name}</strong>
       </div>
       <MeasurementForm

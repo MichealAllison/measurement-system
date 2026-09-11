@@ -19,7 +19,7 @@ export default function RecordMeasurementPage({ params }: { params: { id: string
 
   return (
     <div>
-      <Link href={`/clients/${params.id}`} className="text-indigo text-[13.5px] underline">
+      <Link href={`/clients/${params.id}`} className="text-indigo text-[13px] underline">
         &larr; Back to profile
       </Link>
       <div className="mt-4">

@@ -41,11 +41,11 @@ export default function Dashboard({ clients }: { clients: ClientRow[] }) {
           placeholder="Search by name or phone"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          className="flex-1 px-3.5 py-2.5 border border-line rounded bg-surface2 text-[14.5px] focus:outline-none focus:ring-2 focus:ring-brass"
+          className="flex-1 px-3 py-2 border border-line rounded bg-surface2 text-[14px] focus:outline-none focus:ring-2 focus:ring-brass"
         />
         <Link
           href="/clients/new"
-          className="bg-indigo hover:bg-indigodeep text-surface2 px-4 py-2 rounded text-[14.5px] font-medium whitespace-nowrap"
+          className="bg-indigo hover:bg-indigodeep text-surface2 px-4 py-2 rounded text-[14px] font-medium whitespace-nowrap"
         >
           + New client
         </Link>
@@ -58,7 +58,7 @@ export default function Dashboard({ clients }: { clients: ClientRow[] }) {
       </div>
 
       {shown.length === 0 ? (
-        <div className="text-center text-inksoft text-[14.5px] border border-dashed border-line rounded p-12 mt-3">
+        <div className="text-center text-inksoft text-[14px] border border-dashed border-line rounded p-12 mt-3">
           {clients.length === 0
             ? "No clients yet. Add someone's profile to start recording their measurements here."
             : 'No matches.'}
@@ -76,7 +76,7 @@ export default function Dashboard({ clients }: { clients: ClientRow[] }) {
                 <div className="font-serif text-[16px] font-semibold">{c.name}</div>
                 <div className="text-inksoft text-[13px]">{c.phone}</div>
               </div>
-              <div className="text-inksoft text-[12.5px]">
+              <div className="text-inksoft text-[12px]">
                 {c.measurements[0] ? formatDate(c.measurements[0].date) : 'No measurements yet'}
               </div>
             </Link>

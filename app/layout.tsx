@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="tape-bar" />
         <div className="max-w-5xl mx-auto px-5 pb-16">
           <div className="flex items-center justify-between py-5 border-b border-line/70">
-            <a href="/" className="flex items-center gap-2.5 text-ink">
+            <a href="/" className="flex items-center gap-2 text-ink">
               <span className="grid place-items-center w-8 h-8 rounded bg-indigo text-surface2 font-serif text-lg">M</span>
               <span className="font-semibold tracking-tight">Measurement Book</span>
             </a>
