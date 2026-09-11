@@ -10,9 +10,6 @@ export default function RedeemPage() {
 
   return (
     <div>
-      <header className="pt-8 pb-4 mb-6">
-        <h1 className="font-serif text-[26px] font-semibold">Measurement Book</h1>
-      </header>
       <Link href="/" className="text-indigo text-[13.5px] underline">
         &larr; Back to dashboard
       </Link>

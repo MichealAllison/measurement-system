@@ -24,19 +24,18 @@ export default function Dashboard({ clients }: { clients: ClientRow[] }) {
 
   return (
     <div>
-      <header className="flex items-baseline justify-between pt-8 pb-4 mb-7 border-b border-line">
-        <div className="flex items-baseline gap-2.5">
-          <h1 className="font-serif text-[26px] font-semibold">Measurement Book</h1>
-          <span className="text-inksoft text-[13px]">
-            {clients.length} client{clients.length === 1 ? '' : 's'}
-          </span>
+      <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-10 pb-7">
+        <div>
+          <p className="text-[11px] font-semibold tracking-[0.18em] uppercase text-brass mb-2">Your studio</p>
+          <h1 className="font-serif text-4xl sm:text-5xl font-semibold leading-none">A better fit, recorded.</h1>
+          <p className="text-inksoft text-sm mt-3 max-w-md">Keep every client, fitting, and custom detail in one calm place.</p>
         </div>
         <Link href="/redeem" className="text-indigo text-[13px] underline">
           I have a client link
         </Link>
       </header>
 
-      <div className="flex gap-3 mb-6 items-center">
+      <div className="grid sm:grid-cols-[1fr_auto] gap-3 mb-7 items-center">
         <input
           type="text"
           placeholder="Search by name or phone"
@@ -52,6 +51,12 @@ export default function Dashboard({ clients }: { clients: ClientRow[] }) {
         </Link>
       </div>
 
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
+        <div className="bg-surface border border-line rounded p-4"><div className="text-2xl font-serif font-semibold">{clients.length}</div><div className="text-xs text-inksoft mt-1">Total clients</div></div>
+        <div className="bg-surface border border-line rounded p-4"><div className="text-2xl font-serif font-semibold">{clients.filter((c) => c.measurements[0]).length}</div><div className="text-xs text-inksoft mt-1">With measurements</div></div>
+        <div className="hidden sm:block bg-indigo text-surface2 rounded p-4"><div className="text-2xl font-serif font-semibold">{clients.filter((c) => !c.measurements[0]).length}</div><div className="text-xs text-surface2/70 mt-1">Need a first fitting</div></div>
+      </div>
+
       {shown.length === 0 ? (
         <div className="text-center text-inksoft text-[14.5px] border border-dashed border-line rounded p-12 mt-3">
           {clients.length === 0
@@ -59,7 +64,7 @@ export default function Dashboard({ clients }: { clients: ClientRow[] }) {
             : 'No matches.'}
         </div>
       ) : (
-        <div>
+        <div className="border-t border-line">
           {shown.map((c, i) => (
             <Link
               key={c.id}

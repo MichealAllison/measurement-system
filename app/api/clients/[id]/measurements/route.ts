@@ -10,7 +10,14 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       data[f.key] = parseFloat(body[f.key]);
     }
   }
-  if (Object.keys(data).length === 0) {
+  const custom: Record<string, number> = {};
+  if (body.customMeasurements && typeof body.customMeasurements === 'object') {
+    for (const [label, value] of Object.entries(body.customMeasurements)) {
+      const number = parseFloat(String(value));
+      if (label.trim() && Number.isFinite(number)) custom[label.trim()] = number;
+    }
+  }
+  if (Object.keys(data).length === 0 && Object.keys(custom).length === 0) {
     return NextResponse.json({ error: 'Enter at least one measurement' }, { status: 400 });
   }
 
@@ -23,6 +30,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       unit: body.unit === 'in' ? 'in' : 'cm',
       source: 'designer',
       notes: body.notes || null,
+      custom: Object.keys(custom).length ? custom : undefined,
       ...data,
     },
   });

@@ -33,6 +33,11 @@ npx prisma db push
 `db push` creates the tables (Client, Measurement, LinkCode) in your Neon database
 from `prisma/schema.prisma`.
 
+Measurements keep the common body fields as columns for quick reporting and also
+support additional labeled fields from the form. Extra values are stored in the
+`Measurement.custom` JSON field, so new garment or fitting requirements do not
+need a schema change.
+
 ## 4. Run it locally
 
 ```bash

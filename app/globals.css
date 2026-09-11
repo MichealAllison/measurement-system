@@ -3,9 +3,13 @@
 @tailwind utilities;
 
 body {
-  background: #EAE2D0;
+  background: radial-gradient(circle at 90% 0%, rgba(169, 129, 47, 0.10), transparent 28rem), #EAE2D0;
   color: #231F2E;
 }
+
+input, select, button { font: inherit; }
+button, a, input, select { transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, box-shadow 160ms ease, transform 160ms ease; }
+button:active { transform: translateY(1px); }
 
 .tape-bar {
   height: 10px;

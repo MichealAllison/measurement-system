@@ -24,7 +24,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${fraunces.variable} ${plex.variable}`}>
       <body className="font-sans">
         <div className="tape-bar" />
-        <div className="max-w-3xl mx-auto px-5 pb-16">{children}</div>
+        <div className="max-w-5xl mx-auto px-5 pb-16">
+          <div className="flex items-center justify-between py-5 border-b border-line/70">
+            <a href="/" className="flex items-center gap-2.5 text-ink">
+              <span className="grid place-items-center w-8 h-8 rounded bg-indigo text-surface2 font-serif text-lg">M</span>
+              <span className="font-semibold tracking-tight">Measurement Book</span>
+            </a>
+            <span className="hidden sm:block text-[11px] tracking-[0.16em] uppercase text-inksoft">Studio records</span>
+          </div>
+          <main>{children}</main>
+        </div>
       </body>
     </html>
   );

@@ -1,4 +1,6 @@
-export const FIELDS = [
+export type MeasurementField = { key: string; label: string };
+
+export const FIELDS: MeasurementField[] = [
   { key: 'neck', label: 'Neck' },
   { key: 'shoulder', label: 'Shoulder' },
   { key: 'chest', label: 'Chest / Bust' },
@@ -11,7 +13,19 @@ export const FIELDS = [
   { key: 'thigh', label: 'Thigh' },
 ] as const;
 
+export const FIELD_STYLES = [
+  { key: 'full', label: 'Full set', fields: FIELDS.map((field) => field.key) },
+  { key: 'top', label: 'Top / dress', fields: ['neck', 'shoulder', 'chest', 'waist', 'hip', 'sleeve', 'arm', 'topLength'] },
+  { key: 'bottom', label: 'Trousers / skirt', fields: ['waist', 'hip', 'trouserLength', 'thigh'] },
+] as const;
+
 export type FieldKey = typeof FIELDS[number]['key'];
+
+export function getFieldsForStyle(styleKey: string): MeasurementField[] {
+  const style = FIELD_STYLES.find((item) => item.key === styleKey);
+  const keys = style?.fields || FIELDS.map((field) => field.key);
+  return FIELDS.filter((field) => keys.includes(field.key));
+}
 
 export function formatDate(iso: string | Date) {
   const d = new Date(iso);

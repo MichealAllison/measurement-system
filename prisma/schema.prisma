@@ -25,6 +25,7 @@ model Measurement {
   unit          String   // "cm" | "in"
   source        String   // "designer" | "client"
   notes         String?
+  custom        Json?
   neck          Float?
   shoulder      Float?
   chest         Float?

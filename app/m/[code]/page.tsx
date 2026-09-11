@@ -19,7 +19,7 @@ export default function ClientEntryPage({ params }: { params: { code: string } }
       });
   }, [params.code]);
 
-  async function handleSubmit(data: Record<string, string> & { unit: string; notes: string }) {
+  async function handleSubmit(data: Record<string, unknown>) {
     const res = await fetch(`/api/links/${params.code}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -52,7 +52,7 @@ export default function ClientEntryPage({ params }: { params: { code: string } }
   }
 
   return (
-    <div className="mt-8">
+    <div className="mt-10">
       <div className="bg-surface2 border border-brass rounded p-3.5 text-[13.5px] mb-5">
         Submitting measurements for <strong>{client?.name}</strong>
       </div>

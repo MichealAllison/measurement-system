@@ -10,6 +10,7 @@ type Measurement = {
   unit: string;
   source: string;
   notes: string | null;
+  custom: Record<string, number> | null;
   [key: string]: any;
 };
 
@@ -41,15 +42,13 @@ export default function ClientDetail({
 
   return (
     <div>
-      <header className="pt-8 pb-4 mb-6">
-        <h1 className="font-serif text-[26px] font-semibold">Measurement Book</h1>
+      <header className="pt-10 pb-4">
+        <Link href="/" className="text-indigo text-[13px] underline">&larr; Dashboard</Link>
+        <p className="text-[11px] font-semibold tracking-[0.18em] uppercase text-brass mt-7 mb-2">Client profile</p>
+        <h1 className="font-serif text-4xl font-semibold">{client.name}</h1>
       </header>
-      <Link href="/" className="text-indigo text-[13.5px] underline">
-        &larr; Back to dashboard
-      </Link>
-
       <div className="bg-surface border border-line rounded p-6 mt-4 mb-6">
-        <h2 className="font-serif text-xl font-semibold">{client.name}</h2>
+        <h2 className="font-serif text-xl font-semibold">Fit record</h2>
         <p className="text-inksoft text-sm mt-1 mb-5">{client.phone || 'No phone on file'}</p>
         <div className="flex gap-2.5 flex-wrap">
           <Link
@@ -106,6 +105,12 @@ export default function ClientDetail({
                   <span className="tabular font-semibold">
                     {m[f.key]} {m.unit}
                   </span>
+                </div>
+              ))}
+              {m.custom && Object.entries(m.custom).map(([label, value]) => (
+                <div key={label} className="text-[13.5px]">
+                  <span className="text-inksoft">{label}: </span>
+                  <span className="tabular font-semibold">{value} {m.unit}</span>
                 </div>
               ))}
             </div>

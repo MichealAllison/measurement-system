@@ -7,7 +7,7 @@ import MeasurementForm from '@/components/MeasurementForm';
 export default function RecordMeasurementPage({ params }: { params: { id: string } }) {
   const router = useRouter();
 
-  async function handleSubmit(data: Record<string, string> & { unit: string; notes: string }) {
+  async function handleSubmit(data: Record<string, unknown>) {
     const res = await fetch(`/api/clients/${params.id}/measurements`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -19,9 +19,6 @@ export default function RecordMeasurementPage({ params }: { params: { id: string
 
   return (
     <div>
-      <header className="pt-8 pb-4 mb-6">
-        <h1 className="font-serif text-[26px] font-semibold">Measurement Book</h1>
-      </header>
       <Link href={`/clients/${params.id}`} className="text-indigo text-[13.5px] underline">
         &larr; Back to profile
       </Link>
