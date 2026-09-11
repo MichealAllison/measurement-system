@@ -23,7 +23,7 @@ export type FieldKey = typeof FIELDS[number]['key'];
 
 export function getFieldsForStyle(styleKey: string): MeasurementField[] {
   const style = FIELD_STYLES.find((item) => item.key === styleKey);
-  const keys = style?.fields || FIELDS.map((field) => field.key);
+  const keys: readonly string[] = style?.fields || FIELDS.map((field) => field.key);
   return FIELDS.filter((field) => keys.includes(field.key));
 }
 
