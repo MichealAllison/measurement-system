@@ -45,7 +45,7 @@ export default function Dashboard({ clients }: { clients: ClientRow[] }) {
         />
         <Link
           href="/clients/new"
-          className="bg-indigo hover:bg-indigodeep text-surface2 px-4.5 py-2.5 rounded text-[14.5px] font-medium whitespace-nowrap"
+          className="bg-indigo hover:bg-indigodeep text-surface2 px-4 py-2 rounded text-[14.5px] font-medium whitespace-nowrap"
         >
           + New client
         </Link>

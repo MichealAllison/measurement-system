@@ -66,14 +66,14 @@ export default function NewClientPage() {
           <button
             onClick={() => create(true)}
             disabled={saving}
-            className="bg-indigo hover:bg-indigodeep text-surface2 px-4.5 py-2.5 rounded text-[14.5px] font-medium disabled:opacity-60"
+            className="bg-indigo hover:bg-indigodeep text-surface2 px-4 py-2 rounded text-[14.5px] font-medium disabled:opacity-60"
           >
             Save & add measurements
           </button>
           <button
             onClick={() => create(false)}
             disabled={saving}
-            className="border border-indigo text-indigo hover:bg-surface2 px-4.5 py-2.5 rounded text-[14.5px] font-medium disabled:opacity-60"
+            className="border border-indigo text-indigo hover:bg-surface2 px-4 py-2 rounded text-[14.5px] font-medium disabled:opacity-60"
           >
             Save profile only
           </button>
