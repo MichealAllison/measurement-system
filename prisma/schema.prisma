@@ -1,0 +1,50 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Client {
+  id           String        @id @default(cuid())
+  name         String
+  phone        String?
+  createdAt    DateTime      @default(now())
+  measurements Measurement[]
+  linkCodes    LinkCode[]
+}
+
+model Measurement {
+  id            String   @id @default(cuid())
+  clientId      String
+  client        Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  date          DateTime @default(now())
+  unit          String   // "cm" | "in"
+  source        String   // "designer" | "client"
+  notes         String?
+  neck          Float?
+  shoulder      Float?
+  chest         Float?
+  waist         Float?
+  hip           Float?
+  sleeve        Float?
+  arm           Float?
+  topLength     Float?
+  trouserLength Float?
+  thigh         Float?
+
+  @@index([clientId])
+}
+
+model LinkCode {
+  code      String    @id
+  clientId  String
+  client    Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  usedAt    DateTime?
+
+  @@index([clientId])
+}
