@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { FIELDS, formatDate } from '@/lib/fields';
 
 type Measurement = {
@@ -15,13 +16,21 @@ type Measurement = {
 };
 
 export default function ClientDetail({
-  client,
+  client: initialClient,
 }: {
   client: { id: string; name: string; phone: string | null; measurements: Measurement[] };
 }) {
+  const router = useRouter();
+  const [client, setClient] = useState(initialClient);
   const [link, setLink] = useState<{ url: string; code: string } | null>(null);
   const [copied, setCopied] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [name, setName] = useState(initialClient.name);
+  const [phone, setPhone] = useState(initialClient.phone || '');
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState('');
 
   async function generateLink() {
     setGenerating(true);
@@ -40,6 +49,56 @@ export default function ClientDetail({
     });
   }
 
+  async function saveProfile() {
+    if (!name.trim()) {
+      setError('Name is required');
+      return;
+    }
+
+    setSaving(true);
+    setError('');
+
+    const res = await fetch(`/api/clients/${client.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone }),
+    });
+    const data = await res.json();
+
+    setSaving(false);
+    if (!res.ok) {
+      setError(data.error || 'Something went wrong');
+      return;
+    }
+
+    setClient((current) => ({
+      ...current,
+      name: data.name,
+      phone: data.phone,
+    }));
+    setEditing(false);
+  }
+
+  async function deleteClient() {
+    const confirmed = window.confirm(`Delete ${client.name} from the system? This also removes their measurements.`);
+    if (!confirmed) return;
+
+    setDeleting(true);
+    setError('');
+
+    const res = await fetch(`/api/clients/${client.id}`, { method: 'DELETE' });
+    const data = await res.json();
+
+    setDeleting(false);
+    if (!res.ok) {
+      setError(data.error || 'Could not delete client');
+      return;
+    }
+
+    router.push('/');
+    router.refresh();
+  }
+
   return (
     <div>
       <header className="pt-10 pb-4">
@@ -48,23 +107,94 @@ export default function ClientDetail({
         <h1 className="font-serif text-4xl font-semibold">{client.name}</h1>
       </header>
       <div className="bg-surface border border-line rounded p-6 mt-4 mb-6">
-        <h2 className="font-serif text-xl font-semibold">Fit record</h2>
-        <p className="text-inksoft text-sm mt-1 mb-5">{client.phone || 'No phone on file'}</p>
-        <div className="flex gap-2 flex-wrap">
-          <Link
-            href={`/clients/${client.id}/measure`}
-            className="bg-indigo hover:bg-indigodeep text-surface2 px-4 py-2 rounded text-[14px] font-medium"
-          >
-            Record measurement now
-          </Link>
-          <button
-            onClick={generateLink}
-            disabled={generating}
-            className="border border-indigo text-indigo hover:bg-surface2 px-4 py-2 rounded text-[14px] font-medium disabled:opacity-60"
-          >
-            {generating ? 'Generating…' : 'Send self-entry link'}
-          </button>
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <h2 className="font-serif text-xl font-semibold">Fit record</h2>
+            <p className="text-inksoft text-sm mt-1">{client.phone || 'No phone on file'}</p>
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            <button
+              onClick={() => {
+                setName(client.name);
+                setPhone(client.phone || '');
+                setError('');
+                setEditing(true);
+              }}
+              className="border border-indigo text-indigo hover:bg-surface2 px-3 py-2 rounded text-[14px] font-medium"
+            >
+              Edit profile
+            </button>
+            <button
+              onClick={deleteClient}
+              disabled={deleting}
+              className="border border-rust text-rust hover:bg-rust/5 px-3 py-2 rounded text-[14px] font-medium disabled:opacity-60"
+            >
+              {deleting ? 'Deleting…' : 'Delete'}
+            </button>
+          </div>
         </div>
+
+        {editing && (
+          <div className="mt-5 border-t border-line pt-5">
+            <div className="mb-3">
+              <label className="block text-xs text-inksoft mb-1">Full name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-3 py-2 border border-line rounded bg-surface2 text-[15px] focus:outline-none focus:ring-2 focus:ring-brass"
+              />
+            </div>
+            <div className="mb-3">
+              <label className="block text-xs text-inksoft mb-1">Phone number</label>
+              <input
+                type="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="w-full px-3 py-2 border border-line rounded bg-surface2 text-[15px] focus:outline-none focus:ring-2 focus:ring-brass"
+              />
+            </div>
+            {error && <p className="text-rust text-sm mt-2">{error}</p>}
+            <div className="flex gap-2 mt-4 flex-wrap">
+              <button
+                onClick={saveProfile}
+                disabled={saving}
+                className="bg-indigo hover:bg-indigodeep text-surface2 px-4 py-2 rounded text-[14px] font-medium disabled:opacity-60"
+              >
+                {saving ? 'Saving…' : 'Save changes'}
+              </button>
+              <button
+                onClick={() => {
+                  setEditing(false);
+                  setError('');
+                  setName(client.name);
+                  setPhone(client.phone || '');
+                }}
+                className="border border-indigo text-indigo hover:bg-surface2 px-4 py-2 rounded text-[14px] font-medium"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+
+        {!editing && (
+          <div className="flex gap-2 flex-wrap mt-5">
+            <Link
+              href={`/clients/${client.id}/measure`}
+              className="bg-indigo hover:bg-indigodeep text-surface2 px-4 py-2 rounded text-[14px] font-medium"
+            >
+              Record measurement now
+            </Link>
+            <button
+              onClick={generateLink}
+              disabled={generating}
+              className="border border-indigo text-indigo hover:bg-surface2 px-4 py-2 rounded text-[14px] font-medium disabled:opacity-60"
+            >
+              {generating ? 'Generating…' : 'Send self-entry link'}
+            </button>
+          </div>
+        )}
 
         {link && (
           <div className="mt-4">
