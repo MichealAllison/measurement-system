@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FIELDS, formatDate } from '@/lib/fields';
+import MeasurementForm from '@/components/MeasurementForm';
 
 type Measurement = {
   id: string;
@@ -12,7 +13,7 @@ type Measurement = {
   source: string;
   notes: string | null;
   custom: Record<string, number> | null;
-  [key: string]: any;
+  [key: string]: number | string | null | Record<string, number> | undefined;
 };
 
 export default function ClientDetail({
@@ -31,6 +32,31 @@ export default function ClientDetail({
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState('');
+  const [editingMeasurement, setEditingMeasurement] = useState<Measurement | null>(null);
+
+  async function saveMeasurement(data: Record<string, unknown>) {
+    if (!editingMeasurement) return;
+    const res = await fetch(`/api/clients/${client.id}/measurements/${editingMeasurement.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Could not update measurement');
+
+    const updated: Measurement = {
+      ...result,
+      date: new Date(result.date).toISOString(),
+      custom: result.custom && typeof result.custom === 'object' ? result.custom : null,
+    };
+    setClient((current) => ({
+      ...current,
+      measurements: current.measurements.map((measurement) =>
+        measurement.id === updated.id ? updated : measurement
+      ),
+    }));
+    setEditingMeasurement(null);
+  }
 
   async function generateLink() {
     setGenerating(true);
@@ -223,28 +249,54 @@ export default function ClientDetail({
         client.measurements.map((m) => (
           <div key={m.id} className="border border-line rounded p-4 mb-3 bg-surface2">
             <div className="flex justify-between items-baseline mb-2">
-              <div className="font-semibold text-[14px]">{formatDate(m.date)}</div>
-              <div className="text-[12px] text-brass border border-brass rounded-full px-2 py-0">
-                {m.source === 'client' ? 'client submitted' : 'in-person'}
+              <div>
+                <div className="font-semibold text-[14px]">{formatDate(m.date)}</div>
+                <div className="text-[12px] text-brass mt-1">
+                  {m.source === 'client' ? 'client submitted' : 'in-person'}
+                </div>
               </div>
+              <button
+                type="button"
+                onClick={() => setEditingMeasurement(editingMeasurement?.id === m.id ? null : m)}
+                className="border border-indigo text-indigo hover:bg-surface px-3 py-1 rounded text-[13px] font-medium"
+              >
+                {editingMeasurement?.id === m.id ? 'Close editor' : 'Edit measurement'}
+              </button>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1">
-              {FIELDS.filter((f) => m[f.key] !== null && m[f.key] !== undefined).map((f) => (
-                <div key={f.key} className="text-[13px]">
-                  <span className="text-inksoft">{f.label}: </span>
-                  <span className="tabular font-semibold">
-                    {m[f.key]} {m.unit}
-                  </span>
+            {editingMeasurement?.id === m.id ? (
+              <div className="mt-4 border-t border-line pt-4">
+                <MeasurementForm
+                  heading="Edit measurement"
+                  sub="Update the measurements or change the unit."
+                  submitLabel="Save changes"
+                  initialData={editingMeasurement}
+                  onSubmit={saveMeasurement}
+                  onCancel={() => setEditingMeasurement(null)}
+                />
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1">
+                  {FIELDS.map((field) => {
+                    const value = m[field.key];
+                    if (typeof value !== 'number') return null;
+                    return (
+                      <div key={field.key} className="text-[13px]">
+                        <span className="text-inksoft">{field.label}: </span>
+                        <span className="tabular font-semibold">{value} {m.unit}</span>
+                      </div>
+                    );
+                  })}
+                  {m.custom && Object.entries(m.custom).map(([label, value]) => (
+                    <div key={label} className="text-[13px]">
+                      <span className="text-inksoft">{label}: </span>
+                      <span className="tabular font-semibold">{value} {m.unit}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-              {m.custom && Object.entries(m.custom).map(([label, value]) => (
-                <div key={label} className="text-[13px]">
-                  <span className="text-inksoft">{label}: </span>
-                  <span className="tabular font-semibold">{value} {m.unit}</span>
-                </div>
-              ))}
-            </div>
-            {m.notes && <div className="text-[13px] text-inksoft italic mt-2">{m.notes}</div>}
+                {m.notes && <div className="text-[13px] text-inksoft italic mt-2">{m.notes}</div>}
+              </>
+            )}
           </div>
         ))
       )}

@@ -38,6 +38,14 @@ support additional labeled fields from the form. Extra values are stored in the
 `Measurement.custom` JSON field, so new garment or fitting requirements do not
 need a schema change.
 
+The measurement form starts with the studio's main criteria: round shoulder,
+knee round, ankle round, dress full length, shoulder to half length, shoulder to
+under bust, waist to knee, short dress, 3 quarter dress, shoulder to back half
+length, short Nika, and flowing dress. Older standard measurements remain
+available under “Other standard measurements,” and additional labeled fields can
+still be added. Measurements can be edited from a client's history, including
+their values, notes, and unit.
+
 ## 4. Run it locally
 
 ```bash

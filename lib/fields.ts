@@ -1,5 +1,20 @@
 export type MeasurementField = { key: string; label: string };
 
+export const DEFAULT_MEASUREMENTS: MeasurementField[] = [
+  { key: 'roundShoulder', label: 'Round shoulder' },
+  { key: 'kneeRound', label: 'Knee round' },
+  { key: 'ankleRound', label: 'Ankle round' },
+  { key: 'dressFullLength', label: 'Dress full length' },
+  { key: 'shoulderToHalfLength', label: 'Shoulder to half length' },
+  { key: 'shoulderToUnderBust', label: 'Shoulder to under bust' },
+  { key: 'waistToKnee', label: 'Waist to knee' },
+  { key: 'shortDress', label: 'Short dress' },
+  { key: 'threeQuarterDress', label: '3 quarter dress' },
+  { key: 'shoulderToBackHalfLength', label: 'Shoulder to back half length' },
+  { key: 'shortNika', label: 'Short Nika' },
+  { key: 'flowingDress', label: 'Flowing dress' },
+];
+
 export const FIELDS: MeasurementField[] = [
   { key: 'neck', label: 'Neck' },
   { key: 'shoulder', label: 'Shoulder' },
